@@ -1,6 +1,7 @@
+
 import React, { useState, useEffect } from "react";
 import "./styles.css";
-import { getOrCreateUser } from "./utils/supabase";
+import { getOrCreateUser, supabase } from "./utils/supabase";
 import Login from "./components/Login";
 import Home from "./components/Home";
 import Level1 from "./components/Level1";
@@ -17,11 +18,29 @@ function App() {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    // Check if user is already logged in (localStorage)
-    const savedEmail = localStorage.getItem("userEmail");
-    if (savedEmail) {
-      loadUser(savedEmail);
-    }
+    // Check for existing Supabase session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user?.email) {
+        loadUser(session.user.email);
+      } else {
+        // Fallback: check localStorage for old sessions
+        const savedEmail = localStorage.getItem("userEmail");
+        if (savedEmail) {
+          loadUser(savedEmail);
+        }
+      }
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user?.email) {
+        loadUser(session.user.email);
+      } else if (_event === 'SIGNED_OUT') {
+        handleLogout();
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const loadUser = async (email) => {
@@ -29,6 +48,7 @@ function App() {
     if (data) {
       setUser(email);
       setUserData(data);
+      localStorage.setItem("userEmail", email);
       setCurrentPage("home");
     }
   };
@@ -38,7 +58,9 @@ function App() {
     await loadUser(email);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    // Sign out from Supabase
+    await supabase.auth.signOut();
     localStorage.removeItem("userEmail");
     setUser(null);
     setUserData(null);
