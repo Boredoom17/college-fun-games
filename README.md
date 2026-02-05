@@ -309,12 +309,6 @@ Contributions are welcome! To contribute:
 ```
 5. Open a Pull Request
 
-### Contribution Guidelines
-
-- Follow existing code style
-- Write clear commit messages
-- Test thoroughly before submitting
-- Update documentation as needed
 
 ## 🐛 Known Issues
 
