@@ -7,13 +7,11 @@ function FinalPage({ userEmail, onBack }) {
 
   useEffect(() => {
     const assignNumber = async () => {
-      // Check if user already has a number
       const userData = await getOrCreateUser(userEmail);
 
       if (userData.participant_number) {
         setParticipantNumber(userData.participant_number);
       } else {
-        // Assign new number
         const updated = await assignParticipantNumber(userEmail);
         setParticipantNumber(updated.participant_number);
       }
