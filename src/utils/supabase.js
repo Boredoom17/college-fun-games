@@ -80,7 +80,7 @@ export const completeLevel = async (email, level) => {
   }
 };
 
-// Assign participant number safely
+// Assign participant number 
 export const assignParticipantNumber = async (email) => {
   try {
     const { data: currentUser } = await supabase
