@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { completeLevel } from "../utils/supabase";
 
 function Level5({ userEmail, navigateTo, refreshUserData }) {
-  // First row apps: Capcut, Snapchat, Instagram, Apple, LinkedIn, Opera = SOCIAL
   const firstRow = [
     {
       icon: "https://upload.wikimedia.org/wikipedia/commons/0/0c/Capcut-icon.png",
@@ -30,7 +29,6 @@ function Level5({ userEmail, navigateTo, refreshUserData }) {
     },
   ];
 
-  // Second row apps: Instagram, Messenger, Android, Esewa, Discord = MEDIA
   const secondRow = [
     {
       icon: "https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg",
@@ -72,7 +70,6 @@ function Level5({ userEmail, navigateTo, refreshUserData }) {
       setMessage("✅ Correct! You unscrambled it!");
       setCompleted(true);
 
-      // Mark level 5 as complete in database
       await completeLevel(userEmail, 5);
       await refreshUserData();
     } else {
